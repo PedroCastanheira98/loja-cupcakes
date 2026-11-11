@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabeca('Início')}"></head>
+<body>
+<nav th:replace="~{fragmentos :: topo}"></nav>
+<header class="hero">
+  <div class="w">
+    <div>
+      <h1>Cupcakes que dão vontade de comemorar.</h1>
+      <p>Escolha seus sabores, faça o pedido em poucos cliques e receba em casa.</p>
+      <div class="acoes">
+        <a class="btn sol" th:href="@{/vitrine}">Ver cupcakes</a>
+        <a class="btn claro" th:if="${nomeUsuario == null}" th:href="@{/cadastro}">Criar conta</a>
+      </div>
+    </div>
+    <div class="palco" aria-hidden="true">
+      <div class="disco"></div>
+      <div class="solto s1 cor2"><svg th:replace="~{fragmentos :: cupcake}"></svg></div>
+      <div class="solto s2 cor5"><svg th:replace="~{fragmentos :: cupcake}"></svg></div>
+      <div class="solto s3 cor3"><svg th:replace="~{fragmentos :: cupcake}"></svg></div>
+    </div>
+  </div>
+</header>
+<main class="pagina">
+  <div class="w">
+    <h2>Para começar</h2>
+    <div class="grade">
+      <div class="prod" th:each="p : ${destaques}" th:classappend="${'cor' + (p.id % 6)}">
+        <div class="arte"><svg th:replace="~{fragmentos :: cupcake}"></svg></div>
+        <h3 th:text="${p.nome}">Nome</h3>
+        <p th:text="${p.descricao}">Descrição</p>
+        <div class="base">
+          <span class="preco" th:text="'R$ ' + ${#numbers.formatDecimal(p.preco,1,'POINT',2,'COMMA')}">R$ 0,00</span>
+          <form th:action="@{/carrinho/adicionar}" method="post">
+            <input type="hidden" name="id" th:value="${p.id}">
+            <button class="btn branco" type="submit">Adicionar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<section class="faixa">
+  <div class="w">
+    <h2>Do carrinho até a sua porta.</h2>
+    <a class="btn sol" th:href="@{/vitrine}">Fazer meu pedido</a>
+  </div>
+</section>
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

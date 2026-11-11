@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="cabeca(titulo)">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title th:text="${titulo} + ' - Doce Encanto'">Doce Encanto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/estilo.css}">
+</head>
+<body>
+<nav th:fragment="topo">
+  <div class="w">
+    <a class="marca" th:href="@{/}">Doce Encanto</a>
+    <div class="l">
+      <a th:href="@{/vitrine}">Cupcakes</a>
+      <a th:if="${nomeUsuario != null}" th:href="@{/pedidos}">Meus pedidos</a>
+      <a th:if="${ehAdmin}" th:href="@{/admin}">Admin</a>
+      <a th:if="${nomeUsuario == null}" th:href="@{/login}">Entrar</a>
+      <form th:if="${nomeUsuario != null}" th:action="@{/logout}" method="post">
+        <button type="submit">Sair</button>
+      </form>
+      <a class="car" th:href="@{/carrinho}">Carrinho (<span th:text="${qtdCarrinho}">0</span>)</a>
+    </div>
+  </div>
+</nav>
+<footer th:fragment="rodape">
+  <div class="w"><b>Doce Encanto</b> · Cupcakes feitos com carinho.</div>
+</footer>
+<svg th:fragment="cupcake" viewBox="0 0 64 64" aria-hidden="true">
+  <path class="forma" d="M13 34h38l-5 24H18z"/>
+  <path class="lista" d="M24 36l2 20M32 36v20M40 36l-2 20"/>
+  <ellipse class="glace" cx="32" cy="34" rx="20" ry="7"/>
+  <ellipse class="glace" cx="32" cy="27" rx="15" ry="7"/>
+  <ellipse class="glace" cx="32" cy="20" rx="10" ry="6"/>
+  <circle class="cereja" cx="32" cy="11" r="4"/>
+  <path class="conf" d="M21 31h3M39 32h3M29 25h3M36 22h2"/>
+</svg>
+</body>
+</html>

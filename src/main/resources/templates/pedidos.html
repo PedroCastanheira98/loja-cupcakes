@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabeca('Meus pedidos')}"></head>
+<body>
+<nav th:replace="~{fragmentos :: topo}"></nav>
+<main class="pagina">
+  <div class="w">
+    <h1>Meus pedidos</h1>
+    <div class="aviso ok" th:if="${param.novo}">Pedido feito e pagamento aprovado. Obrigado!</div>
+    <div class="vazio" th:if="${pedidos.isEmpty()}">
+      <p>Você ainda não fez nenhum pedido.</p>
+      <a class="btn" th:href="@{/vitrine}">Ver cupcakes</a>
+    </div>
+    <div class="pedido" th:each="p : ${pedidos}">
+      <header>
+        <h2 th:text="'Pedido #' + ${p.id}">Pedido #1</h2>
+        <span class="selo" th:classappend="${'st-' + p.status}" th:text="${p.status}">PAGO</span>
+      </header>
+      <div class="suave" th:text="${#temporals.format(p.dataPedido,'dd/MM/yyyy HH:mm')}">data</div>
+      <ul>
+        <li th:each="i : ${p.itens}" th:text="${i.quantidade} + 'x ' + ${i.produto.nome}">1x Cupcake</li>
+      </ul>
+      <div class="info">
+        <b th:text="'Total: R$ ' + ${#numbers.formatDecimal(p.valorTotal,1,'POINT',2,'COMMA')}">Total</b>
+        <span th:if="${p.pagamento != null}">Pagamento: <span th:text="${p.pagamento.forma}">PIX</span>
+          <span class="selo" th:classappend="${'st-' + p.pagamento.status}" th:text="${p.pagamento.status}">APROVADO</span></span>
+        <span th:if="${p.entrega != null}">Entrega:
+          <span class="selo" th:classappend="${'st-' + p.entrega.status}" th:text="${p.entrega.status}">AGUARDANDO</span>
+          <span class="suave" th:text="'previsão ' + ${#temporals.format(p.entrega.dataPrevista,'dd/MM/yyyy')}">previsão</span></span>
+      </div>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

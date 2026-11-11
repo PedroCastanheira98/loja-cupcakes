@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabeca('Editar cupcake')}"></head>
+<body>
+<nav th:replace="~{fragmentos :: topo}"></nav>
+<main class="pagina">
+  <div class="w" style="max-width:560px">
+    <h1>Editar cupcake</h1>
+    <div class="bloco">
+      <form th:action="@{/admin/produtos/{id}(id=${produto.id})}" method="post">
+        <label for="nome">Nome</label>
+        <input id="nome" name="nome" th:value="${produto.nome}" required>
+        <label for="descricao">Descrição</label>
+        <input id="descricao" name="descricao" th:value="${produto.descricao}">
+        <label for="preco">Preço (ex.: 7.50)</label>
+        <input id="preco" name="preco" type="number" step="0.01" min="0.01" th:value="${produto.preco}" required>
+        <label for="categoria">Categoria</label>
+        <select id="categoria" name="categoria">
+          <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nome}"
+                  th:selected="${c.id == produto.categoria.id}">Categoria</option>
+        </select>
+        <div class="acoes">
+          <button class="btn" type="submit">Salvar alterações</button>
+          <a class="btn vazado" th:href="@{/admin}">Cancelar</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

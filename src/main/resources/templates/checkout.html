@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabeca('Finalizar pedido')}"></head>
+<body>
+<nav th:replace="~{fragmentos :: topo}"></nav>
+<main class="pagina">
+  <div class="w">
+    <h1>Finalizar pedido</h1>
+    <form class="duas" th:action="@{/checkout}" method="post">
+      <div>
+        <div class="bloco">
+          <h2>Endereço de entrega</h2>
+          <label for="rua">Rua</label><input id="rua" name="rua" autocomplete="street-address" required>
+          <label for="numero">Número</label><input id="numero" name="numero" required>
+          <label for="complemento">Complemento</label><input id="complemento" name="complemento">
+          <label for="bairro">Bairro</label><input id="bairro" name="bairro" required>
+          <label for="cidade">Cidade</label><input id="cidade" name="cidade" autocomplete="address-level2" required>
+          <label for="estado">Estado (sigla, ex.: SP)</label><input id="estado" name="estado" maxlength="2" required>
+          <label for="cep">CEP</label><input id="cep" name="cep" maxlength="9" autocomplete="postal-code" required>
+        </div>
+        <div class="bloco">
+          <h2>Pagamento</h2>
+          <fieldset class="opcoes">
+            <legend>Forma de pagamento</legend>
+            <label class="opcao"><input type="radio" name="forma" value="PIX" checked> Pix</label>
+            <label class="opcao"><input type="radio" name="forma" value="CARTAO"> Cartão</label>
+          </fieldset>
+          <p class="dica">Pagamento de demonstração. Nenhuma cobrança real é feita.</p>
+        </div>
+      </div>
+      <aside class="resumo">
+        <h2>Seu pedido</h2>
+        <ul>
+          <li th:each="i : ${itens}" th:text="${i.quantidade()} + 'x ' + ${i.produto().nome}">1x Cupcake</li>
+        </ul>
+        <div>Total</div>
+        <div class="tot" th:text="'R$ ' + ${#numbers.formatDecimal(total,1,'POINT',2,'COMMA')}">R$ 0,00</div>
+        <button class="btn sol" type="submit">Pagar e confirmar</button>
+      </aside>
+    </form>
+  </div>
+</main>
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

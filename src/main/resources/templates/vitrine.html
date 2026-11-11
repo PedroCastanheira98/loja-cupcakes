@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabeca('Cupcakes')}"></head>
+<body>
+<nav th:replace="~{fragmentos :: topo}"></nav>
+<main class="pagina">
+  <div class="w">
+    <h1>Nossos cupcakes</h1>
+    <div class="abas">
+      <a class="aba" th:classappend="${categoriaAtual == null} ? 'on'" th:href="@{/vitrine}">Todos</a>
+      <a class="aba" th:each="c : ${categorias}" th:classappend="${categoriaAtual == c.id} ? 'on'"
+         th:href="@{/vitrine(categoria=${c.id})}" th:text="${c.nome}">Categoria</a>
+    </div>
+    <div class="grade">
+      <div class="prod" th:each="p : ${produtos}" th:classappend="${'cor' + (p.id % 6)}">
+        <div class="arte"><svg th:replace="~{fragmentos :: cupcake}"></svg></div>
+        <h3 th:text="${p.nome}">Nome</h3>
+        <p th:text="${p.descricao}">Descrição</p>
+        <div class="base">
+          <span class="preco" th:text="'R$ ' + ${#numbers.formatDecimal(p.preco,1,'POINT',2,'COMMA')}">R$ 0,00</span>
+          <form th:action="@{/carrinho/adicionar}" method="post">
+            <input type="hidden" name="id" th:value="${p.id}">
+            <button class="btn branco" type="submit">Adicionar</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <p class="vazio" th:if="${produtos.isEmpty()}">Nenhum cupcake nesta categoria por enquanto.</p>
+  </div>
+</main>
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

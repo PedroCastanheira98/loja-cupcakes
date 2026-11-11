@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabeca('Administração')}"></head>
+<body>
+<nav th:replace="~{fragmentos :: topo}"></nav>
+<main class="pagina">
+  <div class="w">
+    <h1>Área administrativa</h1>
+    <div class="aviso ok" th:if="${param.salvo}">Cupcake salvo.</div>
+    <div class="aviso ok" th:if="${param.excluido}">Cupcake excluído.</div>
+    <div class="aviso erro" th:if="${param.erroExcluir}">Este cupcake já foi vendido e não pode ser excluído. Use "Esconder" para tirá-lo da vitrine.</div>
+
+    <section class="painel">
+      <h2>Pedidos</h2>
+      <p th:if="${pedidos.isEmpty()}">Nenhum pedido ainda.</p>
+      <div class="rolar" th:if="${!pedidos.isEmpty()}">
+        <table class="tabela">
+          <tr><th>Nº</th><th>Cliente</th><th>Data</th><th>Total</th><th>Status</th><th>Pagamento</th></tr>
+          <tr th:each="p : ${pedidos}">
+            <td th:text="${p.id}">1</td>
+            <td th:text="${p.cliente.nome}">Cliente</td>
+            <td th:text="${#temporals.format(p.dataPedido,'dd/MM/yyyy HH:mm')}">data</td>
+            <td th:text="'R$ ' + ${#numbers.formatDecimal(p.valorTotal,1,'POINT',2,'COMMA')}">R$ 0,00</td>
+            <td><span class="selo" th:classappend="${'st-' + p.status}" th:text="${p.status}">PAGO</span></td>
+            <td th:text="${p.pagamento != null} ? ${p.pagamento.forma} + ' - ' + ${p.pagamento.status} : '-'">-</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <div class="admin-grade">
+      <section class="painel">
+        <h2>Cupcakes cadastrados</h2>
+        <div class="rolar">
+          <table class="tabela">
+            <tr><th>Nome</th><th>Categoria</th><th>Preço</th><th>Na vitrine</th><th>Ações</th></tr>
+            <tr th:each="p : ${produtos}">
+              <td th:text="${p.nome}">Nome</td>
+              <td th:text="${p.categoria.nome}">Categoria</td>
+              <td th:text="'R$ ' + ${#numbers.formatDecimal(p.preco,1,'POINT',2,'COMMA')}">R$ 0,00</td>
+              <td th:text="${p.ativo} ? 'Sim' : 'Não'">Sim</td>
+              <td>
+                <div class="acoes-tab">
+                  <a class="link" th:href="@{/admin/produtos/{id}/editar(id=${p.id})}">Editar</a>
+                  <form th:action="@{/admin/produtos/{id}/ativo(id=${p.id})}" method="post">
+                    <button class="link" type="submit" th:text="${p.ativo} ? 'Esconder' : 'Mostrar'">Esconder</button>
+                  </form>
+                  <form th:action="@{/admin/produtos/{id}/excluir(id=${p.id})}" method="post"
+                        onsubmit="return confirm('Excluir este cupcake?')">
+                    <button class="link" type="submit">Excluir</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </section>
+      <section class="painel lil">
+        <h2>Novo cupcake</h2>
+        <form th:action="@{/admin/produtos}" method="post">
+          <label for="nome">Nome</label><input id="nome" name="nome" required>
+          <label for="descricao">Descrição</label><input id="descricao" name="descricao">
+          <label for="preco">Preço (ex.: 7.50)</label><input id="preco" name="preco" type="number" step="0.01" min="0.01" required>
+          <label for="categoria">Categoria</label>
+          <select id="categoria" name="categoria">
+            <option th:each="c : ${categorias}" th:value="${c.id}" th:text="${c.nome}">Categoria</option>
+          </select>
+          <button class="btn" type="submit">Salvar cupcake</button>
+        </form>
+      </section>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

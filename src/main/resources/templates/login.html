@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabeca('Entrar')}"></head>
+<body>
+<nav th:replace="~{fragmentos :: topo}"></nav>
+<main class="auth">
+  <div class="lado">
+    <div class="cor2"><svg th:replace="~{fragmentos :: cupcake}"></svg></div>
+    <h1>Que bom ver você por aqui.</h1>
+  </div>
+  <div class="form">
+    <h2>Entrar</h2>
+    <div class="aviso erro" th:if="${param.error}">E-mail ou senha incorretos. Confira e tente de novo.</div>
+    <div class="aviso ok" th:if="${param.cadastrado}">Conta criada. Agora é só entrar.</div>
+    <form th:action="@{/login}" method="post">
+      <label for="username">E-mail</label>
+      <input id="username" name="username" type="email" autocomplete="username" required>
+      <label for="password">Senha</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required>
+      <button class="btn" type="submit">Entrar</button>
+    </form>
+    <p class="suave">Ainda não tem conta? <a class="link" th:href="@{/cadastro}">Criar conta</a></p>
+  </div>
+</main>
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>

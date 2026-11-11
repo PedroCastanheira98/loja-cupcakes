@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabeca('Carrinho')}"></head>
+<body>
+<nav th:replace="~{fragmentos :: topo}"></nav>
+<main class="pagina">
+  <div class="w">
+    <h1>Seu carrinho</h1>
+    <div class="vazio" th:if="${itens.isEmpty()}">
+      <p>Seu carrinho está vazio. Escolha um cupcake para começar.</p>
+      <a class="btn" th:href="@{/vitrine}">Ver cupcakes</a>
+    </div>
+    <div class="duas" th:if="${!itens.isEmpty()}">
+      <div>
+        <div class="item" th:each="i : ${itens}">
+          <div class="mini" th:classappend="${'cor' + (i.produto().id % 6)}"><svg th:replace="~{fragmentos :: cupcake}"></svg></div>
+          <div>
+            <b th:text="${i.produto().nome}">Nome</b><br>
+            <span class="suave" th:text="'Quantidade: ' + ${i.quantidade()}">Quantidade: 1</span>
+            <form th:action="@{/carrinho/remover}" method="post">
+              <input type="hidden" name="id" th:value="${i.produto().id}">
+              <button class="link" type="submit">Remover</button>
+            </form>
+          </div>
+          <b class="sub" th:text="'R$ ' + ${#numbers.formatDecimal(i.subtotal(),1,'POINT',2,'COMMA')}">R$ 0,00</b>
+        </div>
+        <p><a class="link" th:href="@{/vitrine}">Continuar comprando</a></p>
+      </div>
+      <aside class="resumo">
+        <h2>Resumo</h2>
+        <div>Total</div>
+        <div class="tot" th:text="'R$ ' + ${#numbers.formatDecimal(total,1,'POINT',2,'COMMA')}">R$ 0,00</div>
+        <a class="btn sol" th:href="@{/checkout}">Finalizar pedido</a>
+      </aside>
+    </div>
+  </div>
+</main>
+<footer th:replace="~{fragmentos :: rodape}"></footer>
+</body>
+</html>
